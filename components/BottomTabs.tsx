@@ -10,13 +10,13 @@ export function BottomTabs() {
     <View style={styles.container}>
       <BlurView intensity={80} tint="regular" style={styles.blurContainer}>
         <View style={styles.tab}>
-          <HomeIcon color={"#334155"} />
+          <HomeIcon color={"#f8fafc"} />
         </View>
         <View style={styles.tab}>
-          <CartIcon color={"#334155"} />
+          <CartIcon color={"#f8fafc"} />
         </View>
         <View style={styles.tab}>
-          <HeartIcon color={"#334155"} />
+          <HeartIcon color={"#f8fafc"} />
         </View>
       </BlurView>
     </View>
