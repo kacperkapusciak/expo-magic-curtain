@@ -17,14 +17,12 @@ export default function App() {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.padding}>
-            <Text style={styles.header}>Home</Text>
-            <SearchBar />
-            <Trending />
-            <Cards />
-          </View>
-        </ScrollView>
+        <View style={styles.padding}>
+          <Text style={styles.header}>Home</Text>
+          <SearchBar />
+          <Trending />
+          <Cards />
+        </View>
       </SafeAreaView>
       <BottomTabs />
     </>
