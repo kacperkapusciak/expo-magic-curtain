@@ -1,6 +1,13 @@
-import { View, Text, StyleSheet, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  useColorScheme,
+  SafeAreaView,
+} from "react-native";
 import { Canvas, Circle, Group } from "@shopify/react-native-skia";
 import { BottomTabs } from "./components/BottomTabs";
+import { SearchBar } from "./components/SearchBar";
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -8,28 +15,27 @@ export default function App() {
   const height = 256;
   const r = width * 0.33;
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Home</Text>
-      <Canvas style={{ width, height }}>
-        <Group blendMode="multiply">
-          <Circle cx={r} cy={r} r={r} color="cyan" />
-          <Circle cx={width - r} cy={r} r={r} color="magenta" />
-          <Circle cx={width / 2} cy={width - r} r={r} color="yellow" />
-        </Group>
-      </Canvas>
-      <BottomTabs />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.padding}>
+        <Text style={styles.header}>Home</Text>
+        <SearchBar />
+        <BottomTabs />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  padding: {
+    padding: 16,
   },
   header: {
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: "bold",
+    marginBottom: 16,
+    color: "#0f172a",
   },
 });
