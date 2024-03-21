@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, useColorScheme } from "react-native";
 
 import HomeIcon from "../icons/HomeIcon";
 import HeartIcon from "../icons/HeartIcon";
@@ -6,17 +6,18 @@ import CartIcon from "../icons/CartIcon";
 import { BlurView } from "expo-blur";
 
 export function BottomTabs() {
+  const colorScheme = useColorScheme();
   return (
     <View style={styles.container}>
-      <BlurView intensity={80} tint="regular" style={styles.blurContainer}>
+      <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
         <View style={styles.tab}>
-          <HomeIcon color={"#f8fafc"} />
+          <HomeIcon color={colorScheme === "light" ? "#1e293b" : "#f8fafc"} />
         </View>
         <View style={styles.tab}>
-          <CartIcon color={"#f8fafc"} />
+          <CartIcon color={colorScheme === "light" ? "#1e293b" : "#f8fafc"} />
         </View>
         <View style={styles.tab}>
-          <HeartIcon color={"#f8fafc"} />
+          <HeartIcon color={colorScheme === "light" ? "#1e293b" : "#f8fafc"} />
         </View>
       </BlurView>
     </View>
