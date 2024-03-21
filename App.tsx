@@ -4,26 +4,30 @@ import {
   StyleSheet,
   useColorScheme,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Canvas, Circle, Group } from "@shopify/react-native-skia";
 import { BottomTabs } from "./components/BottomTabs";
 import { SearchBar } from "./components/SearchBar";
 import { Trending } from "./components/Trending";
+import { Cards } from "./components/Cards";
 
 export default function App() {
   const colorScheme = useColorScheme();
-  const width = 256;
-  const height = 256;
-  const r = width * 0.33;
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.padding}>
-        <Text style={styles.header}>Home</Text>
-        <SearchBar />
-        <Trending />
-        <BottomTabs />
-      </View>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <View style={styles.padding}>
+            <Text style={styles.header}>Home</Text>
+            <SearchBar />
+            <Trending />
+            <Cards />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <BottomTabs />
+    </>
   );
 }
 
