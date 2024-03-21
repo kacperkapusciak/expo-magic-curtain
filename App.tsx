@@ -8,6 +8,7 @@ import {
 import { Canvas, Circle, Group } from "@shopify/react-native-skia";
 import { BottomTabs } from "./components/BottomTabs";
 import { SearchBar } from "./components/SearchBar";
+import { Trending } from "./components/Trending";
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -19,6 +20,7 @@ export default function App() {
       <View style={styles.padding}>
         <Text style={styles.header}>Home</Text>
         <SearchBar />
+        <Trending />
         <BottomTabs />
       </View>
     </SafeAreaView>

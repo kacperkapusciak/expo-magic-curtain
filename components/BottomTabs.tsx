@@ -29,9 +29,10 @@ const styles = StyleSheet.create({
     bottom: 40,
     borderWidth: 2,
     borderRadius: 60,
-    borderColor: "#475569",
+    borderColor: "#cbd5e1",
     overflow: "hidden",
     alignSelf: "center",
+    borderCurve: "continuous",
   },
   blurContainer: {
     flexDirection: "row",
