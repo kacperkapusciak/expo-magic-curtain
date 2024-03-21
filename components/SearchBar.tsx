@@ -1,12 +1,28 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, useColorScheme } from "react-native";
 
 import SearchIcon from "../icons/SearchIcon";
 
 export function SearchBar() {
+  const colorScheme = useColorScheme();
   return (
-    <View style={[styles.container, styles.padding]}>
-      <SearchIcon color="#475569" />
-      <Text style={styles.text}>Search</Text>
+    <View
+      style={[
+        styles.container,
+        styles.padding,
+        colorScheme === "light"
+          ? { backgroundColor: "#f1f5f9" }
+          : { backgroundColor: "#1e293b" },
+      ]}
+    >
+      <SearchIcon color={colorScheme === "light" ? "#475569" : "#f1f5f9"} />
+      <Text
+        style={[
+          styles.text,
+          colorScheme === "light" ? { color: "#64748b" } : { color: "#f1f5f9" },
+        ]}
+      >
+        Search
+      </Text>
     </View>
   );
 }
@@ -14,7 +30,6 @@ export function SearchBar() {
 const styles = StyleSheet.create({
   container: {
     height: 60,
-    backgroundColor: "#f1f5f9",
     borderRadius: 20,
     borderCurve: "continuous",
     alignItems: "center",
@@ -25,7 +40,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "#64748b",
     marginHorizontal: 8,
   },
 });

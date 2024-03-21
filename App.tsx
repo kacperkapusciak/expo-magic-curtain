@@ -16,9 +16,25 @@ export default function App() {
   const colorScheme = useColorScheme();
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          colorScheme === "light"
+            ? { backgroundColor: "white" }
+            : { backgroundColor: "#020617" },
+        ]}
+      >
         <View style={styles.padding}>
-          <Text style={styles.header}>Home</Text>
+          <Text
+            style={[
+              styles.header,
+              colorScheme === "light"
+                ? { color: "#0f172a" }
+                : { color: "#f1f5f9" },
+            ]}
+          >
+            Home
+          </Text>
           <SearchBar />
           <Trending />
           <Cards />
@@ -40,6 +56,5 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: "bold",
     marginBottom: 16,
-    color: "#0f172a",
   },
 });

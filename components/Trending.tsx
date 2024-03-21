@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, useColorScheme } from "react-native";
 
 const trending = [
   "on sale",
@@ -9,12 +9,29 @@ const trending = [
 ];
 
 export function Trending() {
+  const colorScheme = useColorScheme();
+
   return (
     <View>
-      <Text style={styles.header}>Trending searches</Text>
+      <Text
+        style={[
+          styles.header,
+          colorScheme === "light" ? { color: "#334155" } : { color: "#e2e8f0" },
+        ]}
+      >
+        Trending searches
+      </Text>
       <View style={styles.wrapper}>
         {trending.map((item) => (
-          <Text style={styles.text} key={item}>
+          <Text
+            style={[
+              styles.text,
+              colorScheme === "light"
+                ? { borderColor: "#cbd5e1", color: "#64748b" }
+                : { borderColor: "#64748b", color: "#f1f5f9" },
+            ]}
+            key={item}
+          >
             {item}
           </Text>
         ))}
@@ -28,15 +45,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginVertical: 12,
-    color: "#334155",
   },
   text: {
     borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "#cbd5e1",
+
     fontSize: 12,
-    color: "#64748b",
     textTransform: "uppercase",
     padding: 4,
     borderRadius: 8,
