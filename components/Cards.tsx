@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   },
   round: {
     borderRadius: 16,
-    borderCurve: "continuous",
     overflow: "hidden",
   },
   image: {
