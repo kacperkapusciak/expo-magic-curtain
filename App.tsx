@@ -142,13 +142,15 @@ export default function App() {
 
   useEffect(() => {
     const listener = Appearance.addChangeListener(async ({ colorScheme }) => {
-      console.log(colorScheme);
-      const snapshot2 = await makeImageFromView(ref);
-      setSecondSnapshot(snapshot2);
-      progress.value = withTiming(1, { duration: 800 }, () => {
-        runOnJS(setFirstSnapshot)(null);
-        runOnJS(setSecondSnapshot)(null);
-      });
+      setTimeout(async () => {
+        console.log(colorScheme);
+        const snapshot2 = await makeImageFromView(ref);
+        setSecondSnapshot(snapshot2);
+        progress.value = withTiming(1, { duration: 4000 }, () => {
+          runOnJS(setFirstSnapshot)(null);
+          runOnJS(setSecondSnapshot)(null);
+        });
+      }, 100);
     });
 
     return () => {
@@ -166,63 +168,98 @@ export default function App() {
   const transitioning = firstSnapshot !== null && secondSnapshot !== null;
   if (transitioning) {
     return (
-      <Canvas style={{ flex: 1 }}>
-        <Fill>
-          <Shader source={transition(swirl)} uniforms={uniforms}>
-            <ImageShader
-              image={firstSnapshot}
-              fit="cover"
-              width={width}
-              height={height}
-            />
-            <ImageShader
-              image={secondSnapshot}
-              fit="cover"
-              width={width}
-              height={height}
-            />
-          </Shader>
-        </Fill>
-      </Canvas>
+      <SafeAreaView style={[styles.container]}>
+        <Canvas style={{ height: height }}>
+          <Fill>
+            <Shader source={transition(swirl)} uniforms={uniforms}>
+              <ImageShader
+                image={firstSnapshot}
+                fit="cover"
+                width={width}
+                height={height - 53}
+              />
+              <ImageShader
+                image={secondSnapshot}
+                fit="cover"
+                width={width}
+                height={height - 53}
+              />
+            </Shader>
+          </Fill>
+        </Canvas>
+      </SafeAreaView>
     );
   }
 
+  {
+    if (firstSnapshot) {
+      console.log(firstSnapshot);
+      console.log(firstSnapshot.width(), firstSnapshot.height());
+    }
+  }
   return (
     <>
       <SafeAreaView
-        ref={ref}
         style={[
           styles.container,
-          colorScheme === "light"
-            ? { backgroundColor: "white" }
-            : { backgroundColor: "#020617" },
+          // colorScheme === "light"
+          //   ? { backgroundColor: "white" }
+          //   : { backgroundColor: "#020617" },
         ]}
       >
-        <View style={styles.padding}>
-          <View style={styles.row}>
-            <Text
+        {firstSnapshot && !secondSnapshot && (
+          <>
+            <Canvas
               style={[
-                styles.header,
-                colorScheme === "light"
-                  ? { color: "#0f172a" }
-                  : { color: "#f1f5f9" },
+                {
+                  height: height,
+                },
               ]}
             >
-              Home
-            </Text>
-            <Pressable style={styles.themeSwitcher} onPress={changeTheme}>
-              {colorScheme === "light" ? (
-                <MoonIcon color="#1e293b" />
-              ) : (
-                <SunIcon color="#e2e8f0" />
-              )}
-            </Pressable>
+              <Image
+                image={firstSnapshot}
+                fit="cover"
+                width={width}
+                height={height - 53}
+              />
+            </Canvas>
+          </>
+        )}
+        <View
+          ref={ref}
+          style={[
+            { width: width },
+            colorScheme === "light"
+              ? { backgroundColor: "white" }
+              : { backgroundColor: "#020617" },
+          ]}
+        >
+          <View style={styles.padding}>
+            <View style={styles.row}>
+              <Text
+                style={[
+                  styles.header,
+                  colorScheme === "light"
+                    ? { color: "#0f172a" }
+                    : { color: "#f1f5f9" },
+                ]}
+              >
+                Home
+              </Text>
+              <Pressable style={styles.themeSwitcher} onPress={changeTheme}>
+                {colorScheme === "light" ? (
+                  <MoonIcon color="#1e293b" />
+                ) : (
+                  <SunIcon color="#e2e8f0" />
+                )}
+              </Pressable>
+            </View>
+            <SearchBar />
+            <Trending />
+            <Cards />
           </View>
-          <SearchBar />
-          <Trending />
-          <Cards />
+          <BottomTabs />
         </View>
-        <BottomTabs />
       </SafeAreaView>
     </>
   );
