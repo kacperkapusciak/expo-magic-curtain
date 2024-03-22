@@ -83,48 +83,24 @@ const transition = (t: Transition) => {
   `;
 };
 
-const linear: Transition = glsl`
-vec4 transition(vec2 uv) {
-  return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    progress
-  );
-}
-`;
-
-const swirl: Transition = glsl`
+const directionalwrap: Transition = glsl`
+// Author: pschroen
 // License: MIT
-// Author: Sergey Kosarevsky
-// ( http://www.linderdaum.com )
-// ported by gre from https://gist.github.com/corporateshark/cacfedb8cca0f5ce3f7c
 
-vec4 transition(vec2 UV)
-{
-	float Radius = 1.0;
+const vec2 direction = vec2(-1.0, 1.0);
 
-	float T = progress;
+const float smoothness = 0.5;
+const vec2 center = vec2(0.5, 0.5);
 
-	UV -= vec2( 0.5, 0.5 );
-
-	float Dist = length(UV);
-
-	if ( Dist < Radius )
-	{
-		float Percent = (Radius - Dist) / Radius;
-		float A = ( T <= 0.5 ) ? mix( 0.0, 1.0, T/0.5 ) : mix( 1.0, 0.0, (T-0.5)/0.5 );
-		float Theta = Percent * Percent * A * 8.0 * 3.14159;
-		float S = sin( Theta );
-		float C = cos( Theta );
-		UV = vec2( dot(UV, vec2(C, -S)), dot(UV, vec2(S, C)) );
-	}
-	UV += vec2( 0.5, 0.5 );
-
-	vec4 C0 = getFromColor(UV);
-	vec4 C1 = getToColor(UV);
-
-	return mix( C0, C1, T );
+vec4 transition (vec2 uv) {
+  vec2 v = normalize(direction);
+  v /= abs(v.x) + abs(v.y);
+  float d = v.x * center.x + v.y * center.y;
+  float m = 1.0 - smoothstep(-smoothness, 0.0, v.x * uv.x + v.y * uv.y - (d - 0.5 + progress * (1.0 + smoothness)));
+  return mix(getFromColor((uv - 0.5) * (1.0 - m) + 0.5), getToColor((uv - 0.5) * m + 0.5), m);
 }
+
+
 `;
 
 export default function App() {
@@ -162,7 +138,7 @@ export default function App() {
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
         colorSchemeSv.value = colorScheme;
-        progress.value = withTiming(1, { duration: 4000 }, () => {
+        progress.value = withTiming(1, { duration: 1700 }, () => {
           runOnJS(setFirstSnapshot)(null);
           runOnJS(setSecondSnapshot)(null);
         });
@@ -187,7 +163,7 @@ export default function App() {
       <Animated.View style={[{ flex: 1 }, animatedBackgroundColor]}>
         <Canvas style={{ height: height }}>
           <Fill>
-            <Shader source={transition(swirl)} uniforms={uniforms}>
+            <Shader source={transition(directionalwrap)} uniforms={uniforms}>
               <ImageShader
                 image={firstSnapshot}
                 fit="cover"
