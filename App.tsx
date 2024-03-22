@@ -27,8 +27,10 @@ import {
   Skia,
   type SkImage,
 } from "@shopify/react-native-skia";
-import {
+import Animated, {
+  interpolateColor,
   runOnJS,
+  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
@@ -128,10 +130,23 @@ vec4 transition(vec2 UV)
 export default function App() {
   const progress = useSharedValue(0);
   const colorScheme = useColorScheme();
+  const colorSchemeSv = useSharedValue(colorScheme);
 
   const ref = useRef<SafeAreaView>(null);
   const [firstSnapshot, setFirstSnapshot] = useState<SkImage | null>(null);
   const [secondSnapshot, setSecondSnapshot] = useState<SkImage | null>(null);
+
+  const animatedBackgroundColor = useAnimatedStyle(() => {
+    return {
+      backgroundColor: interpolateColor(
+        progress.value,
+        [0, 1],
+        colorSchemeSv.value === "light"
+          ? ["#020617", "#ffffff"]
+          : ["#ffffff", "#020617"],
+      ),
+    };
+  });
 
   const changeTheme = async () => {
     progress.value = 0;
@@ -146,6 +161,7 @@ export default function App() {
         console.log(colorScheme);
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
+        colorSchemeSv.value = colorScheme;
         progress.value = withTiming(1, { duration: 4000 }, () => {
           runOnJS(setFirstSnapshot)(null);
           runOnJS(setSecondSnapshot)(null);
@@ -168,7 +184,7 @@ export default function App() {
   const transitioning = firstSnapshot !== null && secondSnapshot !== null;
   if (transitioning) {
     return (
-      <SafeAreaView style={[styles.container]}>
+      <Animated.View style={[{ flex: 1 }, animatedBackgroundColor]}>
         <Canvas style={{ height: height }}>
           <Fill>
             <Shader source={transition(swirl)} uniforms={uniforms}>
@@ -176,57 +192,42 @@ export default function App() {
                 image={firstSnapshot}
                 fit="cover"
                 width={width}
-                height={height - 53}
+                height={height}
               />
               <ImageShader
                 image={secondSnapshot}
                 fit="cover"
                 width={width}
-                height={height - 53}
+                height={height}
               />
             </Shader>
           </Fill>
         </Canvas>
-      </SafeAreaView>
+      </Animated.View>
     );
   }
-
-  {
-    if (firstSnapshot) {
-      console.log(firstSnapshot);
-      console.log(firstSnapshot.width(), firstSnapshot.height());
-    }
-  }
   return (
-    <>
-      <SafeAreaView
+    <View style={{ flex: 1 }}>
+      {firstSnapshot && (
+        <Canvas style={[{ height: height }]}>
+          <Image
+            image={firstSnapshot}
+            fit="cover"
+            width={width}
+            height={height}
+          />
+        </Canvas>
+      )}
+      <View
+        ref={ref}
         style={[
           styles.container,
-          // colorScheme === "light"
-          //   ? { backgroundColor: "white" }
-          //   : { backgroundColor: "#020617" },
+          colorScheme === "light"
+            ? { backgroundColor: "white" }
+            : { backgroundColor: "#020617" },
         ]}
       >
-        {firstSnapshot && !secondSnapshot && (
-          <>
-            <Canvas
-              style={[
-                {
-                  height: height,
-                },
-              ]}
-            >
-              <Image
-                image={firstSnapshot}
-                fit="cover"
-                width={width}
-                height={height - 53}
-              />
-            </Canvas>
-          </>
-        )}
         <View
-          ref={ref}
           style={[
             { width: width },
             colorScheme === "light"
@@ -260,14 +261,15 @@ export default function App() {
           </View>
           <BottomTabs />
         </View>
-      </SafeAreaView>
-    </>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    paddingTop: 53,
   },
   padding: {
     padding: 16,
