@@ -2,6 +2,7 @@ import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
 import Animated, { BounceIn } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import { atom, useAtom } from "jotai";
+import * as Haptics from "expo-haptics";
 
 import HeartIcon from "../icons/HeartIcon";
 import HeartDuotoneIcon from "../icons/HeartDuotoneIcon";
@@ -38,7 +39,12 @@ function Card({ image, cardAtom }) {
     <View style={[styles.card, styles.round]}>
       <Image source={image} style={[styles.image, styles.round]} />
       <View style={styles.iconWrapper}>
-        <Pressable onPress={() => setIsLiked(!isLiked)}>
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setIsLiked(!isLiked);
+          }}
+        >
           <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
             {isLiked ? (
               <Animated.View entering={isThemeSwitching ? null : bounceIn}>

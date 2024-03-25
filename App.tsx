@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -8,15 +9,8 @@ import {
   Appearance,
   Dimensions,
 } from "react-native";
-import { BottomTabs } from "./components/BottomTabs";
-import { SearchBar } from "./components/SearchBar";
-import { Trending } from "./components/Trending";
-import { Cards, themeSwitchAtom } from "./components/Cards";
+import * as Haptics from "expo-haptics";
 import { useAtom } from "jotai";
-
-import SunIcon from "./icons/SunIcon";
-import MoonIcon from "./icons/MoonIcon";
-import { useEffect, useRef, useState } from "react";
 import {
   Canvas,
   Fill,
@@ -34,6 +28,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { BottomTabs } from "./components/BottomTabs";
+import { SearchBar } from "./components/SearchBar";
+import { Trending } from "./components/Trending";
+import { Cards, themeSwitchAtom } from "./components/Cards";
+
+import SunIcon from "./icons/SunIcon";
+import MoonIcon from "./icons/MoonIcon";
 import { Transition, glsl, transition } from "./utils/shader";
 
 const TRANSITION_DURATION = 800;
@@ -88,6 +90,8 @@ export default function App() {
 
   const changeTheme = async () => {
     setThemeSwitching(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     progress.value = 0;
     const snapshot1 = await makeImageFromView(ref);
     setFirstSnapshot(snapshot1);
@@ -124,8 +128,8 @@ export default function App() {
     };
   });
 
-  const transitioning = firstSnapshot !== null && secondSnapshot !== null;
-  if (transitioning) {
+  const isTransitioning = firstSnapshot !== null && secondSnapshot !== null;
+  if (isTransitioning) {
     return (
       <Animated.View style={[{ flex: 1 }, animatedBackgroundColor]}>
         <Canvas style={{ height: height }}>
@@ -216,7 +220,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 53,
+    paddingTop: 45,
   },
   padding: {
     padding: 16,
