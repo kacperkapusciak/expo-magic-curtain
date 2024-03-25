@@ -33,7 +33,7 @@ function Card({ image, cardAtom }) {
         <Pressable onPress={() => setIsLiked(!isLiked)}>
           <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
             {isLiked ? (
-              <HeartDuotoneIcon color="#5eead4" />
+              <HeartDuotoneIcon color="#67e8f9" />
             ) : (
               <HeartIcon color="#f1f5f9" />
             )}
