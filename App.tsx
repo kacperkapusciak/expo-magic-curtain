@@ -11,10 +11,8 @@ import {
 import { BottomTabs } from "./components/BottomTabs";
 import { SearchBar } from "./components/SearchBar";
 import { Trending } from "./components/Trending";
-import { Cards } from "./components/Cards";
-import { atom, useAtom } from "jotai";
-
-export const themeSwitchAtom = atom(false);
+import { Cards, themeSwitchAtom } from "./components/Cards";
+import { useAtom } from "jotai";
 
 import SunIcon from "./icons/SunIcon";
 import MoonIcon from "./icons/MoonIcon";
@@ -218,7 +216,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     paddingTop: 53,
   },
   padding: {
@@ -232,7 +229,6 @@ const styles = StyleSheet.create({
   themeSwitcher: {
     paddingBottom: 10,
     paddingRight: 4,
-    // borderRadius: 8,
   },
   header: {
     fontSize: 36,

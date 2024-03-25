@@ -1,14 +1,12 @@
 import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
-import Animated, {
-  BounceIn,
-  LayoutAnimationConfig,
-} from "react-native-reanimated";
+import Animated, { BounceIn } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import { atom, useAtom } from "jotai";
 
 import HeartIcon from "../icons/HeartIcon";
 import HeartDuotoneIcon from "../icons/HeartDuotoneIcon";
-import { themeSwitchAtom } from "../App";
+
+export const themeSwitchAtom = atom(false);
 
 const bikeAtom = atom(false);
 const milkAtom = atom(false);
