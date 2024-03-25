@@ -12,6 +12,9 @@ import { BottomTabs } from "./components/BottomTabs";
 import { SearchBar } from "./components/SearchBar";
 import { Trending } from "./components/Trending";
 import { Cards } from "./components/Cards";
+import { atom, useAtom } from "jotai";
+
+export const themeSwitchAtom = atom(false);
 
 import SunIcon from "./icons/SunIcon";
 import MoonIcon from "./icons/MoonIcon";
@@ -67,6 +70,7 @@ export default function App() {
   const progress = useSharedValue(0);
   const colorScheme = useColorScheme();
   const colorSchemeSv = useSharedValue(colorScheme);
+  const [, setThemeSwitching] = useAtom(themeSwitchAtom);
 
   const ref = useRef<SafeAreaView>(null);
   const [firstSnapshot, setFirstSnapshot] = useState<SkImage | null>(null);
@@ -85,6 +89,7 @@ export default function App() {
   });
 
   const changeTheme = async () => {
+    setThemeSwitching(true);
     progress.value = 0;
     const snapshot1 = await makeImageFromView(ref);
     setFirstSnapshot(snapshot1);
@@ -103,6 +108,7 @@ export default function App() {
           () => {
             runOnJS(setFirstSnapshot)(null);
             runOnJS(setSecondSnapshot)(null);
+            runOnJS(setThemeSwitching)(false);
           },
         );
       }, 100);

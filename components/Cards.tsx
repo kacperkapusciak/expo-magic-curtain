@@ -1,14 +1,23 @@
 import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
+import Animated, {
+  BounceIn,
+  LayoutAnimationConfig,
+} from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import { atom, useAtom } from "jotai";
 
 import HeartIcon from "../icons/HeartIcon";
 import HeartDuotoneIcon from "../icons/HeartDuotoneIcon";
+import { themeSwitchAtom } from "../App";
 
 const bikeAtom = atom(false);
 const milkAtom = atom(false);
 const teddybearAtom = atom(false);
 const ballAtom = atom(false);
+
+const bounceIn = BounceIn.duration(400).withInitialValues({
+  transform: [{ scale: 0.5 }],
+});
 
 export function Cards() {
   return (
@@ -25,6 +34,7 @@ export function Cards() {
 }
 
 function Card({ image, cardAtom }) {
+  const [isThemeSwitching] = useAtom(themeSwitchAtom);
   const [isLiked, setIsLiked] = useAtom(cardAtom);
   return (
     <View style={[styles.card, styles.round]}>
@@ -33,7 +43,9 @@ function Card({ image, cardAtom }) {
         <Pressable onPress={() => setIsLiked(!isLiked)}>
           <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
             {isLiked ? (
-              <HeartDuotoneIcon color="#67e8f9" />
+              <Animated.View entering={isThemeSwitching ? null : bounceIn}>
+                <HeartDuotoneIcon color="#67e8f9" />
+              </Animated.View>
             ) : (
               <HeartIcon color="#f1f5f9" />
             )}
