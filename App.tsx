@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   Pressable,
   Appearance,
-  PixelRatio,
   Dimensions,
 } from "react-native";
 import { BottomTabs } from "./components/BottomTabs";
@@ -36,7 +35,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const pd = PixelRatio.get();
+const TRANSITION_DURATION = 800;
+
 const { width, height } = Dimensions.get("window");
 
 type Value = string | number;
@@ -83,24 +83,28 @@ const transition = (t: Transition) => {
   `;
 };
 
-const directionalwrap: Transition = glsl`
-// Author: pschroen
+const wipeLeft: Transition = glsl`
+// Author: Jake Nelson
 // License: MIT
 
-const vec2 direction = vec2(-1.0, 1.0);
-
-const float smoothness = 0.5;
-const vec2 center = vec2(0.5, 0.5);
-
-vec4 transition (vec2 uv) {
-  vec2 v = normalize(direction);
-  v /= abs(v.x) + abs(v.y);
-  float d = v.x * center.x + v.y * center.y;
-  float m = 1.0 - smoothstep(-smoothness, 0.0, v.x * uv.x + v.y * uv.y - (d - 0.5 + progress * (1.0 + smoothness)));
-  return mix(getFromColor((uv - 0.5) * (1.0 - m) + 0.5), getToColor((uv - 0.5) * m + 0.5), m);
+vec4 transition(vec2 uv) {
+  vec2 p=uv.xy/vec2(1.0).xy;
+  vec4 a=getFromColor(p);
+  vec4 b=getToColor(p);
+  return mix(a, b, step(1.0-p.x,progress));
 }
+`;
 
+const wipeRight: Transition = glsl`
+// Author: Jake Nelson
+// License: MIT
 
+vec4 transition(vec2 uv) {
+  vec2 p=uv.xy/vec2(1.0).xy;
+  vec4 a=getFromColor(p);
+  vec4 b=getToColor(p);
+  return mix(a, b, step(0.0+p.x,progress));
+}
 `;
 
 export default function App() {
@@ -138,10 +142,14 @@ export default function App() {
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
         colorSchemeSv.value = colorScheme;
-        progress.value = withTiming(1, { duration: 1700 }, () => {
-          runOnJS(setFirstSnapshot)(null);
-          runOnJS(setSecondSnapshot)(null);
-        });
+        progress.value = withTiming(
+          1,
+          { duration: TRANSITION_DURATION },
+          () => {
+            runOnJS(setFirstSnapshot)(null);
+            runOnJS(setSecondSnapshot)(null);
+          },
+        );
       }, 100);
     });
 
@@ -163,7 +171,12 @@ export default function App() {
       <Animated.View style={[{ flex: 1 }, animatedBackgroundColor]}>
         <Canvas style={{ height: height }}>
           <Fill>
-            <Shader source={transition(directionalwrap)} uniforms={uniforms}>
+            <Shader
+              source={transition(
+                colorScheme === "light" ? wipeLeft : wipeRight,
+              )}
+              uniforms={uniforms}
+            >
               <ImageShader
                 image={firstSnapshot}
                 fit="cover"
