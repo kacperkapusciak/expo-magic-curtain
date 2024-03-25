@@ -1,6 +1,9 @@
-import { View, Image, StyleSheet, Dimensions } from "react-native";
-import HeartIcon from "../icons/HeartIcon";
+import { useState } from "react";
+import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
 import { BlurView } from "expo-blur";
+
+import HeartIcon from "../icons/HeartIcon";
+import HeartDuotoneIcon from "../icons/HeartDuotoneIcon";
 
 export function Cards() {
   return (
@@ -14,13 +17,20 @@ export function Cards() {
 }
 
 function Card({ image }) {
+  const [isLiked, setIsLiked] = useState(false);
   return (
     <View style={[styles.card, styles.round]}>
       <Image source={image} style={[styles.image, styles.round]} />
       <View style={styles.iconWrapper}>
-        <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
-          <HeartIcon color="#f1f5f9" />
-        </BlurView>
+        <Pressable onPress={() => setIsLiked(!isLiked)}>
+          <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
+            {isLiked ? (
+              <HeartDuotoneIcon color="#5eead4" />
+            ) : (
+              <HeartIcon color="#f1f5f9" />
+            )}
+          </BlurView>
+        </Pressable>
       </View>
     </View>
   );
