@@ -138,7 +138,6 @@ export default function App() {
   useEffect(() => {
     const listener = Appearance.addChangeListener(async ({ colorScheme }) => {
       setTimeout(async () => {
-        console.log(colorScheme);
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
         colorSchemeSv.value = colorScheme;
