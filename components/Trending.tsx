@@ -28,7 +28,10 @@ export function Trending() {
               styles.text,
               colorScheme === "light"
                 ? { borderColor: "#cbd5e1", color: "#64748b" }
-                : { borderColor: "#64748b", color: "#f1f5f9" },
+                : {
+                    color: "#f1f5f9",
+                    backgroundColor: "#334155",
+                  },
             ]}
             key={item}
           >
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     padding: 4,
     borderRadius: 8,
+    overflow: "hidden",
   },
   wrapper: {
     gap: 6,

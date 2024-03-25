@@ -18,7 +18,7 @@ function Card({ image }) {
     <View style={[styles.card, styles.round]}>
       <Image source={image} style={[styles.image, styles.round]} />
       <View style={styles.iconWrapper}>
-        <BlurView intensity={30} tint="light" style={styles.blurContainer}>
+        <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
           <HeartIcon color="#f1f5f9" />
         </BlurView>
       </View>
