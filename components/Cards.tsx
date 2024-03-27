@@ -1,4 +1,11 @@
-import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Platform,
+} from "react-native";
 import Animated, { BounceIn } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import { atom, useAtom } from "jotai";
@@ -30,10 +37,17 @@ export function Cards() {
     </View>
   );
 }
-
 function Card({ image, cardAtom }) {
   const [isThemeSwitching] = useAtom(themeSwitchAtom);
   const [isLiked, setIsLiked] = useAtom(cardAtom);
+
+  const icon = isLiked ? (
+    <Animated.View entering={isThemeSwitching ? null : bounceIn}>
+      <HeartDuotoneIcon color="#67e8f9" />
+    </Animated.View>
+  ) : (
+    <HeartIcon color="#f1f5f9" />
+  );
   return (
     <View style={[styles.card, styles.round]}>
       <Image source={image} style={[styles.image, styles.round]} />
@@ -42,16 +56,29 @@ function Card({ image, cardAtom }) {
           onPress={() => {
             setIsLiked(!isLiked);
           }}
+          style={{
+            borderRadius: 32,
+            overflow: "hidden",
+          }}
         >
-          <BlurView intensity={30} tint="regular" style={styles.blurContainer}>
-            {isLiked ? (
-              <Animated.View entering={isThemeSwitching ? null : bounceIn}>
-                <HeartDuotoneIcon color="#67e8f9" />
-              </Animated.View>
-            ) : (
-              <HeartIcon color="#f1f5f9" />
-            )}
-          </BlurView>
+          {Platform.OS === "ios" ? (
+            <BlurView
+              intensity={30}
+              tint="regular"
+              style={styles.blurContainer}
+            >
+              {icon}
+            </BlurView>
+          ) : (
+            <View
+              style={[
+                styles.blurContainer,
+                { backgroundColor: "rgba(0, 0, 0, 0.2)" },
+              ]}
+            >
+              {icon}
+            </View>
+          )}
         </Pressable>
       </View>
     </View>
@@ -71,7 +98,6 @@ const styles = StyleSheet.create({
   },
   round: {
     borderRadius: 16,
-    overflow: "hidden",
   },
   image: {
     width: Dimensions.get("window").width / 2 - 24,
@@ -82,9 +108,9 @@ const styles = StyleSheet.create({
     width: 48,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 32,
   },
   iconWrapper: {
-    borderRadius: 32,
     position: "absolute",
     bottom: 16,
     right: 16,
