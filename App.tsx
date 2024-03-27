@@ -68,18 +68,20 @@ vec4 transition(vec2 uv) {
 export default function App() {
   const progress = useSharedValue(0);
   const colorScheme = useColorScheme();
-  const [, setThemeSwitching] = useAtom(themeSwitchAtom);
+  const [isThemeSwitching, setThemeSwitching] = useAtom(themeSwitchAtom);
 
   const ref = useRef<View>(null);
   const [firstSnapshot, setFirstSnapshot] = useState<SkImage | null>(null);
   const [secondSnapshot, setSecondSnapshot] = useState<SkImage | null>(null);
 
   const changeTheme = async () => {
-    setThemeSwitching(true);
+    if (isThemeSwitching) return;
+
     progress.value = 0;
     const snapshot1 = await makeImageFromView(ref);
     setFirstSnapshot(snapshot1);
     Appearance.setColorScheme(colorScheme === "light" ? "dark" : "light");
+    setThemeSwitching(true);
   };
 
   useEffect(() => {
