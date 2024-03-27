@@ -98,7 +98,7 @@ export default function App() {
             runOnJS(setThemeSwitching)(false);
           },
         );
-      }, 100);
+      }, 30);
     });
 
     return () => {
