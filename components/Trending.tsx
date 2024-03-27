@@ -60,12 +60,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    overflow: "hidden",
+    padding: 4,
   },
   text: {
     fontSize: 12,
     textTransform: "uppercase",
-    padding: 4,
   },
   wrapper: {
     gap: 6,
