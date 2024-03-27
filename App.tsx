@@ -83,7 +83,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    const listener = Appearance.addChangeListener(async ({ colorScheme }) => {
+    const listener = Appearance.addChangeListener(async () => {
       setTimeout(async () => {
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
@@ -114,7 +114,7 @@ export default function App() {
   const isTransitioning = firstSnapshot !== null && secondSnapshot !== null;
   if (isTransitioning) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.fill}>
         <Canvas style={{ height: height }}>
           <Fill>
             <Shader
@@ -144,19 +144,9 @@ export default function App() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.fill}>
       {firstSnapshot && (
-        <Canvas
-          style={[
-            {
-              position: "absolute",
-              height: height,
-              width: width,
-              zIndex: 1,
-              elevation: 1,
-            },
-          ]}
-        >
+        <Canvas style={styles.absolute}>
           <Image
             image={firstSnapshot}
             fit="cover"
@@ -219,8 +209,18 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: Platform.OS === "ios" ? 50 : 10,
   },
+  fill: {
+    flex: 1,
+  },
   padding: {
     padding: 16,
+  },
+  absolute: {
+    position: "absolute",
+    height: height,
+    width: width,
+    zIndex: 1,
+    elevation: 1,
   },
   row: {
     flexDirection: "row",
