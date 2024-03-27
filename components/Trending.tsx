@@ -23,20 +23,26 @@ export function Trending() {
       </Text>
       <View style={styles.wrapper}>
         {trending.map((item) => (
-          <Text
-            style={[
-              styles.text,
-              colorScheme === "light"
-                ? { borderColor: "#cbd5e1", color: "#64748b" }
-                : {
-                    color: "#f1f5f9",
-                    backgroundColor: "#334155",
-                  },
-            ]}
+          <View
             key={item}
+            style={[
+              styles.textWrapper,
+              colorScheme === "light"
+                ? { borderColor: "#cbd5e1" }
+                : { backgroundColor: "#334155" },
+            ]}
           >
-            {item}
-          </Text>
+            <Text
+              style={[
+                styles.text,
+                colorScheme === "light"
+                  ? { color: "#64748b" }
+                  : { color: "#f1f5f9" },
+              ]}
+            >
+              {item}
+            </Text>
+          </View>
         ))}
       </View>
     </View>
@@ -49,16 +55,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginVertical: 12,
   },
-  text: {
+  textWrapper: {
     borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  text: {
     fontSize: 12,
     textTransform: "uppercase",
     padding: 4,
-    borderRadius: 8,
-    overflow: "hidden",
   },
   wrapper: {
     gap: 6,

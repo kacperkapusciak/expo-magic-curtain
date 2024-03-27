@@ -8,8 +8,8 @@ import {
   Pressable,
   Appearance,
   Dimensions,
+  Platform,
 } from "react-native";
-import * as Haptics from "expo-haptics";
 import { useAtom } from "jotai";
 import {
   Canvas,
@@ -20,10 +20,8 @@ import {
   Shader,
   type SkImage,
 } from "@shopify/react-native-skia";
-import Animated, {
-  interpolateColor,
+import {
   runOnJS,
-  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
@@ -37,6 +35,7 @@ import { Cards, themeSwitchAtom } from "./components/Cards";
 import SunIcon from "./icons/SunIcon";
 import MoonIcon from "./icons/MoonIcon";
 import { Transition, glsl, transition } from "./utils/shader";
+import { StatusBar } from "expo-status-bar";
 
 const TRANSITION_DURATION = 800;
 
@@ -69,29 +68,14 @@ vec4 transition(vec2 uv) {
 export default function App() {
   const progress = useSharedValue(0);
   const colorScheme = useColorScheme();
-  const colorSchemeSv = useSharedValue(colorScheme);
   const [, setThemeSwitching] = useAtom(themeSwitchAtom);
 
-  const ref = useRef<SafeAreaView>(null);
+  const ref = useRef<View>(null);
   const [firstSnapshot, setFirstSnapshot] = useState<SkImage | null>(null);
   const [secondSnapshot, setSecondSnapshot] = useState<SkImage | null>(null);
 
-  const animatedBackgroundColor = useAnimatedStyle(() => {
-    return {
-      backgroundColor: interpolateColor(
-        progress.value,
-        [0, 1],
-        colorSchemeSv.value === "light"
-          ? ["#020617", "#ffffff"]
-          : ["#ffffff", "#020617"],
-      ),
-    };
-  });
-
   const changeTheme = async () => {
     setThemeSwitching(true);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
     progress.value = 0;
     const snapshot1 = await makeImageFromView(ref);
     setFirstSnapshot(snapshot1);
@@ -103,7 +87,6 @@ export default function App() {
       setTimeout(async () => {
         const snapshot2 = await makeImageFromView(ref);
         setSecondSnapshot(snapshot2);
-        colorSchemeSv.value = colorScheme;
         progress.value = withTiming(
           1,
           { duration: TRANSITION_DURATION },
@@ -131,7 +114,7 @@ export default function App() {
   const isTransitioning = firstSnapshot !== null && secondSnapshot !== null;
   if (isTransitioning) {
     return (
-      <Animated.View style={[{ flex: 1 }, animatedBackgroundColor]}>
+      <View style={{ flex: 1 }}>
         <Canvas style={{ height: height }}>
           <Fill>
             <Shader
@@ -155,13 +138,25 @@ export default function App() {
             </Shader>
           </Fill>
         </Canvas>
-      </Animated.View>
+        <StatusBar translucent />
+      </View>
     );
   }
+
   return (
     <View style={{ flex: 1 }}>
       {firstSnapshot && (
-        <Canvas style={[{ height: height }]}>
+        <Canvas
+          style={[
+            {
+              position: "absolute",
+              height: height,
+              width: width,
+              zIndex: 1,
+              elevation: 1,
+            },
+          ]}
+        >
           <Image
             image={firstSnapshot}
             fit="cover"
@@ -174,6 +169,7 @@ export default function App() {
         ref={ref}
         style={[
           styles.container,
+          { height: height },
           colorScheme === "light"
             ? { backgroundColor: "white" }
             : { backgroundColor: "#020617" },
@@ -214,13 +210,14 @@ export default function App() {
           <BottomTabs />
         </View>
       </View>
+      <StatusBar translucent />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 45,
+    paddingTop: Platform.OS === "ios" ? 50 : 10,
   },
   padding: {
     padding: 16,
