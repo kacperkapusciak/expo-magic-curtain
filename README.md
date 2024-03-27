@@ -1,4 +1,4 @@
-# Expo Magic Curtain
+# Expo Magic Curtain 🪄💫
 
 ## Running the project
 
