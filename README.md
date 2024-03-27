@@ -1,20 +1,29 @@
-# Reanimated example
+# Expo Magic Curtain
 
-<p>
-  <!-- iOS -->
-  <img alt="Supports Expo iOS" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff" />
-  <!-- Android -->
-  <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
-  <!-- Web -->
-</p>
+## Running the project
 
-## 🚀 How to use
+Clone the repository onto your computer:
 
-> `npx create-react-native-app my-app -t with-reanimated`
+```sh
+git clone https://github.com/kacperkapusciak/expo-magic-curtain.git
+```
 
-- Run `yarn` or `npm install`
-- Run `yarn start` or `npm run start` to try it out.
+Checkout into the project folder:
 
-## 📝 Notes
+```sh
+cd expo-magic-curtain
+```
 
-- [`react-native-reanimated` docs](https://docs.swmansion.com/react-native-reanimated/)
+Install the packages with `npm`:
+
+```sh
+npm install
+```
+
+And, start the projectL:
+
+```sh
+npm run start
+```
+
+You may use your phone to test the app via [Expo Go](https://docs.expo.dev/get-started/expo-go/) app, or run the project locally using iOS simulator or Android emulator.
