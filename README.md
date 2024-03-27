@@ -20,7 +20,7 @@ Install the packages with `npm`:
 npm install
 ```
 
-And, start the projectL:
+And, start the project:
 
 ```sh
 npm run start
