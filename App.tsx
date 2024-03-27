@@ -37,7 +37,7 @@ import MoonIcon from "./icons/MoonIcon";
 import { Transition, glsl, transition } from "./utils/shader";
 import { StatusBar } from "expo-status-bar";
 
-const TRANSITION_DURATION = 800;
+const TRANSITION_DURATION = 500;
 
 const { width, height } = Dimensions.get("window");
 
