@@ -1,19 +1,20 @@
 {
   "dependencies": {
-    "@expo/metro-runtime": "~3.2.1",
-    "@shopify/react-native-skia": "1.2.3",
-    "@types/react": "~18.2.79",
-    "expo": "~51.0.7",
-    "expo-blur": "~13.0.2",
-    "expo-status-bar": "~1.12.1",
+    "@expo/metro-runtime": "~5.0.4",
+    "@shopify/react-native-skia": "v2.0.0-next.4",
+    "@types/react": "~19.0.10",
+    "expo": "^53.0.11",
+    "expo-blur": "~14.1.5",
+    "expo-image": "~2.3.0",
+    "expo-status-bar": "~2.2.3",
     "jotai": "^2.7.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.74.1",
-    "react-native-reanimated": "~3.10.1",
-    "react-native-svg": "15.2.0",
-    "react-native-web": "~0.19.6",
-    "typescript": "~5.3.3"
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-native": "0.79.3",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-svg": "15.11.2",
+    "react-native-web": "^0.20.0",
+    "typescript": "~5.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

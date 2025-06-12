@@ -17,13 +17,13 @@ cd expo-magic-curtain
 Install the packages with `npm`:
 
 ```sh
-npm install
+yarn install
 ```
 
 And, start the project:
 
 ```sh
-npm run start
+yarn start
 ```
 
 You may use your phone to test the app via [Expo Go](https://docs.expo.dev/get-started/expo-go/) app, or run the project locally using iOS simulator or Android emulator.

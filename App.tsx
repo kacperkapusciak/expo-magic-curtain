@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   useColorScheme,
-  SafeAreaView,
   Pressable,
   Appearance,
   Dimensions,
@@ -107,10 +106,7 @@ export default function App() {
   }, []);
 
   const uniforms = useDerivedValue(() => {
-    return {
-      progress: progress.value,
-      resolution: [width, height],
-    };
+    return { progress: progress.value, resolution: [width, height] };
   });
 
   const isTransitioning = firstSnapshot !== null && secondSnapshot !== null;
@@ -159,6 +155,7 @@ export default function App() {
       )}
       <View
         ref={ref}
+        collapsable={false}
         style={[
           styles.container,
           { height: height },
@@ -208,15 +205,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: Platform.OS === "ios" ? 50 : 10,
-  },
-  fill: {
-    flex: 1,
-  },
-  padding: {
-    padding: 16,
-  },
+  container: { paddingTop: Platform.OS === "ios" ? 50 : 10 },
+  fill: { flex: 1 },
+  padding: { padding: 16 },
   absolute: {
     position: "absolute",
     height: height,
@@ -229,13 +220,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  themeSwitcher: {
-    paddingBottom: 10,
-    paddingRight: 4,
-  },
-  header: {
-    fontSize: 36,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
+  themeSwitcher: { paddingBottom: 10, paddingRight: 4 },
+  header: { fontSize: 36, fontWeight: "bold", marginBottom: 16 },
 });
